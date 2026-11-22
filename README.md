@@ -1,46 +1,139 @@
-# FRRP Coral Bleaching Pilot v0.1
+# FRRP Coral Bleaching Pilot
 
-This directory contains a small, reproducible extraction for an initial baseline experiment.
+This project builds a small, reproducible FRRP coral-bleaching dataset and
+documents a first, transparent baseline analysis. The work focuses on
+understanding the data, checking its quality, preparing model-ready files, and
+evaluating a simple time-based baseline without overstating what the data can
+support.
 
-## Files
+## What we did
 
-- `extract_frrp_baseline_v0_1.sql`: read-only SQLite extraction used to create the pilot.
-- `frrp_baseline_pilot_v0_1.csv`: 2,394 rows and 17 columns.
-- `baseline.py`: a dependency-light median baseline with a temporal 2016 test holdout.
+- Extracted FRRP observations from the Global Coral Bleaching Database for
+  2005–2016.
+- Joined sample, site, environmental, and bleaching records while preserving
+  one row per `Sample_ID`.
+- Explored the resulting data with checks for duplicates, missing values,
+  distributions, geographic coverage, repeated sites, and descriptive
+  relationships.
+- Defined eight environmental predictors and kept identifiers, dates, and
+  outcome-derived fields out of the model inputs to reduce leakage risk.
+- Prepared a model-ready dataset with a temporal split: 2005–2015 for training
+  and 2016 for testing.
+- Investigated the repeated `ClimSST = 262.15` value without deleting or
+  altering those observations.
+- Evaluated a dependency-light median baseline on the 2016 holdout.
 
-## Source and extraction
+## Repository contents
 
-The source database is `Global_Coral_Bleaching_Database_SQLite_11_24_21.db` in the user's Downloads directory. The source was only read; it was not modified.
+- [`data/extract_frrp_baseline_v0_1.sql`](data/extract_frrp_baseline_v0_1.sql):
+  read-only SQLite query used for the FRRP extraction.
+- [`data/frrp_baseline_pilot_v0_1.csv`](data/frrp_baseline_pilot_v0_1.csv):
+  the extracted pilot dataset with 2,394 rows and 17 columns.
+- [`notebooks/01_data_exploration.ipynb`](notebooks/01_data_exploration.ipynb):
+  read-only exploratory analysis and data-quality checks.
+- [`src/prepare_dataset.py`](src/prepare_dataset.py):
+  validates the pilot, selects predictors, checks target bounds, creates the
+  temporal split, and writes model-ready files and a preparation report.
+- [`baseline.py`](baseline.py): computes the training median and evaluates it
+  on the 2016 holdout.
+- `data/modeling/`: generated model-ready datasets, split metadata, and the
+  preparation report.
+
+## Dataset and extraction
+
+The source database was
+`Global_Coral_Bleaching_Database_SQLite_11_24_21.db` in the user's Downloads
+directory. It was read only and was not modified.
 
 The extraction:
 
-- selects `Data_Source_LUT.Data_Source = 'FRRP'` (database ID 2);
+- selects the FRRP data source (`Data_Source = 2`);
 - restricts observations to `2005 <= Date_Year <= 2016`;
 - requires a non-null `Percent_Bleached` target;
-- joins sample, site, environmental, and bleaching tables by `Sample_ID`/`Site_ID`;
-- produces one row per sample. The extraction currently yields 2,394 unique samples.
+- joins `Sample_Event_tbl`, `Site_Info_tbl`, `Environmental_tbl`, and
+  `Bleaching_tbl` by `Sample_ID` and `Site_ID`;
+- orders the result chronologically and produces one row per sample.
 
-The SQLite database joins are one-to-one for this selected pilot: 2,394 bleach rows, 2,394 unique bleach IDs, 2,394 unique sample IDs, and 2,394 joined rows.
+The extracted pilot contains 2,394 unique samples from 2,299 sites. No exact
+duplicate rows or duplicate `Sample_ID` values were found. `Reef_ID` is empty
+for all rows, so it was not useful for this first pass.
 
-## Data-quality observations
+## Data-quality findings
 
-- No `Sample_ID` is duplicated in the CSV.
-- 2,299 unique FRRP sites appear among 2,394 observations, so site repeated-measures are present.
-- The target ranges from 0 to 100, with mean 15.3055 and median 10.26.
-- 201 observations have target value 0; 2 have target value 100.
-- `Reef_ID` is empty for all 2,394 rows and was therefore not useful for this pilot.
+- `Percent_Bleached` ranges from 0 to 100; its overall mean is 15.3055 and
+  median is 10.26.
+- There are 201 observations with a target of 0 and 2 with a target of 100.
 - Depth ranges from 1.2 to 29.9 m.
-- Latitude ranges from 24.4348 to 27.1784; longitude ranges from -83.0360 to -80.0136.
+- Latitude ranges from 24.4348 to 27.1784; longitude ranges from -83.0360 to
+  -80.0136.
 - No missing values occur in the retained numeric columns.
+- Missing values were not replaced with zero.
+- `ClimSST = 262.15` occurs in 187 observations. The original values were
+  preserved, and the repeated value remains an unresolved data-quality issue.
 
-Missing values were not replaced with zero.
+The notebook provides the detailed distributions, year counts, missing-value
+checks, summary tables, and descriptive analyses.
 
-## Variables and leakage precautions
+## Features and leakage precautions
 
-`ClimSST` and temperature fields are stored in Kelvin according to the database schema. `Degree Heating Weeks`-named fields and `TSA` should have their units and temporal windows confirmed against original database documentation before interpretation.
+The selected environmental features are:
 
-The extraction intentionally excludes outcome-derived bleaching fields and severity/prevalence fields. For a baseline, identifiers (`Sample_ID`, `Site_ID`, `Reef_ID`) and the target itself should not be used as predictors.
+- `Depth_m`
+- `ClimSST`
+- `Temperature_Mean`
+- `SSTA`
+- `SSTA_DHW`
+- `TSA`
+- `TSA_DHW`
+- `Windspeed`
 
-## Honest baseline scope
+`Sample_ID`, `Site_ID`, and `Reef_ID` are identifiers rather than predictors.
+`Date_Year` is used only to create the temporal split. Latitude and longitude
+are retained in the pilot CSV but are not part of the initial feature set.
+Outcome-derived fields, severity/prevalence fields, and the target itself are
+excluded to avoid target leakage.
 
-`baseline.py` predicts the 2016 observations using the target median learned from 2005-2015 observations. It does not add environmental predictors or claim that observed bleaching can be forecast into the future. This is a reproducibility and difficulty benchmark, not a calibrated conservation alert system.
+The database schema stores `ClimSST` and temperature fields in Kelvin.
+Degree Heating Weeks fields and `TSA` still require confirmation of their
+units and temporal windows before scientific interpretation.
+
+## Dataset preparation
+
+Running [`src/prepare_dataset.py`](src/prepare_dataset.py) validates the
+target and required columns, rejects invalid target values, preserves the
+original pilot CSV, and writes:
+
+- `data/modeling/modeling_dataset_v1.csv`: all 2,394 eligible rows with the
+  eight features and target.
+- `data/modeling/train_v1.csv`: 2,201 observations from 2005–2015.
+- `data/modeling/test_v1.csv`: 193 observations from 2016.
+- `data/modeling/split_metadata_v1.csv`: sample, site, year, and split
+  assignments.
+- `data/modeling/dataset_preparation_report.md`: detailed preparation report.
+
+No observations were excluded for a missing target or predictor in this
+version. The temporal split has no `Sample_ID` overlap, but 22 sites occur in
+both periods, so repeated-site effects remain a limitation.
+
+## Baseline result
+
+Running [`baseline.py`](baseline.py) learns the median target from 2005–2015
+and predicts that constant value for every 2016 observation:
+
+- Training target median: `10.2600`
+- 2016 MAE: `7.3684`
+- 2016 RMSE: `10.0726`
+- Mean error (`actual - predicted`): `1.3439`
+
+This is an explainable reproducibility benchmark. It does not use the
+environmental predictors and does not establish future forecasting ability,
+causality, or a calibrated conservation alert system.
+
+## Reproducing the preparation and baseline
+
+From the project root:
+
+```bash
+.venv/bin/python src/prepare_dataset.py
+.venv/bin/python baseline.py
+```
