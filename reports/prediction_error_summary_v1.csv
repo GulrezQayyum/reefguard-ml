@@ -1,0 +1,43 @@
+Analysis,Model,Group,Rank,Test_Row,Observation_Count,Mean_Absolute_Error,Median_Absolute_Error,Overestimates,Underestimates,Exact_Predictions,Actual,Predicted,Error_Actual_Minus_Predicted,Absolute_Error
+Overall,Median Baseline,All test observations,,,193,7.368445595854923,6.410000000000002,96,96,1,,,,
+Bleaching range,Median Baseline,Low (0–10%),,,94,6.182659574468086,6.09,94,0,0,,,,
+Bleaching range,Median Baseline,Moderate (>10–30%),,,93,6.839139784946236,6.410000000000002,2,90,1,,,,
+Bleaching range,Median Baseline,High (>30–100%),,,6,34.15,27.240000000000002,0,6,0,,,,
+Largest absolute errors,Median Baseline,All test observations,1,106,,,,,,,77.78,10.26,67.52,67.52
+Largest absolute errors,Median Baseline,All test observations,2,77,,,,,,,50.0,10.26,39.74,39.74
+Largest absolute errors,Median Baseline,All test observations,3,42,,,,,,,41.67,10.26,31.410000000000004,31.410000000000004
+Largest absolute errors,Median Baseline,All test observations,4,123,,,,,,,33.33,10.26,23.07,23.07
+Largest absolute errors,Median Baseline,All test observations,5,84,,,,,,,32.43,10.26,22.17,22.17
+Largest absolute errors,Median Baseline,All test observations,6,148,,,,,,,31.25,10.26,20.990000000000002,20.990000000000002
+Largest absolute errors,Median Baseline,All test observations,7,133,,,,,,,29.58,10.26,19.32,19.32
+Largest absolute errors,Median Baseline,All test observations,8,126,,,,,,,28.57,10.26,18.310000000000002,18.310000000000002
+Largest absolute errors,Median Baseline,All test observations,9,131,,,,,,,27.78,10.26,17.520000000000003,17.520000000000003
+Largest absolute errors,Median Baseline,All test observations,10,80,,,,,,,27.19,10.26,16.93,16.93
+Overall,Linear Regression,All test observations,,,193,9.041619374581241,7.973544221048096,137,56,0,,,,
+Bleaching range,Linear Regression,Low (0–10%),,,94,11.982948114672205,11.410791492026192,94,0,0,,,,
+Bleaching range,Linear Regression,Moderate (>10–30%),,,93,4.8629389576715845,4.270328470966252,43,50,0,,,,
+Bleaching range,Linear Regression,High (>30–100%),,,6,27.730348908589264,21.535132237188066,0,6,0,,,,
+Largest absolute errors,Linear Regression,All test observations,1,106,,,,,,,77.78,19.19299054973908,58.58700945026092,58.58700945026092
+Largest absolute errors,Linear Regression,All test observations,2,77,,,,,,,50.0,14.829598381889127,35.17040161811087,35.17040161811087
+Largest absolute errors,Linear Regression,All test observations,3,95,,,,,,,0.0,28.557705589111606,-28.557705589111606,28.557705589111606
+Largest absolute errors,Linear Regression,All test observations,4,66,,,,,,,1.12,29.5978843522455,-28.4778843522455,28.4778843522455
+Largest absolute errors,Linear Regression,All test observations,5,97,,,,,,,2.8,29.259189682076226,-26.459189682076225,26.459189682076225
+Largest absolute errors,Linear Regression,All test observations,6,42,,,,,,,41.67,16.37401295010966,25.295987049890343,25.295987049890343
+Largest absolute errors,Linear Regression,All test observations,7,183,,,,,,,7.53,29.771278771479388,-22.241278771479386,22.241278771479386
+Largest absolute errors,Linear Regression,All test observations,8,5,,,,,,,0.0,21.25919755834593,-21.25919755834593,21.25919755834593
+Largest absolute errors,Linear Regression,All test observations,9,127,,,,,,,0.0,20.550356636297465,-20.550356636297465,20.550356636297465
+Largest absolute errors,Linear Regression,All test observations,10,118,,,,,,,9.23,29.63238727365274,-20.40238727365274,20.40238727365274
+Overall,Random Forest,All test observations,,,193,9.75212224210399,7.7026615476190425,127,66,0,,,,
+Bleaching range,Random Forest,Low (0–10%),,,94,12.181837717665509,9.243395873015874,90,4,0,,,,
+Bleaching range,Random Forest,Moderate (>10–30%),,,93,6.0942422033054555,5.423997222222226,37,56,0,,,,
+Bleaching range,Random Forest,High (>30–100%),,,6,28.383720393017473,22.401806786315536,0,6,0,,,,
+Largest absolute errors,Random Forest,All test observations,1,106,,,,,,,77.78,18.780561587301587,58.99943841269841,58.99943841269841
+Largest absolute errors,Random Forest,All test observations,2,77,,,,,,,50.0,10.216700116642617,39.78329988335739,39.78329988335739
+Largest absolute errors,Random Forest,All test observations,3,141,,,,,,,0.0,39.49504134800385,-39.49504134800385,39.49504134800385
+Largest absolute errors,Random Forest,All test observations,4,161,,,,,,,0.0,39.00438607142856,-39.00438607142856,39.00438607142856
+Largest absolute errors,Random Forest,All test observations,5,163,,,,,,,4.17,42.10568384920632,-37.93568384920632,37.93568384920632
+Largest absolute errors,Random Forest,All test observations,6,143,,,,,,,4.76,38.06246925805674,-33.30246925805674,33.30246925805674
+Largest absolute errors,Random Forest,All test observations,7,145,,,,,,,7.41,39.74058752645503,-32.330587526455034,32.330587526455034
+Largest absolute errors,Random Forest,All test observations,8,182,,,,,,,1.69,33.63362650793652,-31.943626507936518,31.943626507936518
+Largest absolute errors,Random Forest,All test observations,9,162,,,,,,,5.49,36.9862217857143,-31.496221785714297,31.496221785714297
+Largest absolute errors,Random Forest,All test observations,10,142,,,,,,,7.52,38.722676784511776,-31.202676784511777,31.202676784511777

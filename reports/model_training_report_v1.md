@@ -62,3 +62,4 @@ Important limitations:
 - Environmental units and temporal windows require further scientific documentation.
 - No hyperparameter tuning was performed.
 - A positive R² should not be considered success in isolation; the models should be compared directly with the median baseline on the same test rows.
+e
