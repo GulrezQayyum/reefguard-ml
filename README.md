@@ -6,6 +6,27 @@ understanding the data, checking its quality, preparing model-ready files, and
 evaluating a simple time-based baseline without overstating what the data can
 support.
 
+## ReefGuard-ML application
+
+The Streamlit application provides a public project homepage and a separate
+scientific dashboard. To install its dependencies and run it from the project
+root:
+
+```bash
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m streamlit run app.py
+```
+
+The hero uses a remote reef photograph with a color fallback. To use a local
+image instead, provide `reefguard/assets/coral-reef-hero.jpg`; image loading
+failures do not prevent the application from starting.
+
+The assessment loads the existing `models/random_forest_v1.joblib` artifact.
+That saved pipeline uses 300 trees and a minimum leaf size of 2; it is not the
+RF-2 configuration (200 trees, minimum leaf size 5) in the temporal-validation
+report. No RF-2 fitted pipeline is present, and the application does not retrain
+or alter saved models, datasets, predictions, or evaluation results.
+
 ## What we did
 
 - Extracted FRRP observations from the Global Coral Bleaching Database for
